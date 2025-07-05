@@ -1,1 +1,3 @@
 URL Streamlit Cloud setelah deploy diisi di sini.
+
+Url : https://data-analysis-dicoding-gdrcttakk2b4qw77s9phic.streamlit.app/
