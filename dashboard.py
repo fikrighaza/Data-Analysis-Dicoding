@@ -23,6 +23,15 @@ monthly = (
     orders.groupby("month_year").size().reset_index(name="total_orders")
 )
 
+# Tambahkan fitur interaktif: filter bulan
+st.sidebar.header("🔎 Filter Data")
+selected_months = st.sidebar.multiselect(
+    "Pilih Bulan (opsional):",
+    options=monthly["month_year"].unique(),
+    default=monthly["month_year"].unique()
+)
+filtered_monthly = monthly[monthly["month_year"].isin(selected_months)]
+
 # Rata-rata payment per kategori
 merged = order_items.merge(payments, on="order_id")
 merged = merged.merge(products, on="product_id")
@@ -36,10 +45,10 @@ avg_payment = (
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("📈 Jumlah Pesanan yang Dikirim per Bulan")
+    st.subheader("📈 Jumlah Pesanan yang Dikirim per Bulan (Filtered)")
     fig1, ax1 = plt.subplots(figsize=(10, 5))
-    sns.lineplot(data=monthly, x="month_year", y="total_orders", marker="o", ax=ax1)
-    ax1.set_xticklabels(monthly["month_year"], rotation=45)
+    sns.lineplot(data=filtered_monthly, x="month_year", y="total_orders", marker="o", ax=ax1)
+    ax1.set_xticklabels(filtered_monthly["month_year"], rotation=45)
     ax1.set_xlabel("Bulan")
     ax1.set_ylabel("Jumlah Pesanan")
     ax1.grid(True)
@@ -55,4 +64,5 @@ with col2:
 
 # Footer
 st.markdown("---")
-st.markdown("🧾 **Catatan:** Dashboard ini menampilkan ringkasan hasil analisis berdasarkan data transaksi e-commerce Brasil dari Olist")
+st.markdown("🧾 **Catatan:** Dashboard ini menampilkan ringkasan hasil analisis berdasarkan data transaksi e-commerce Brasil dari Olist. "
+            "Gunakan fitur sidebar untuk memfilter data bulanan sesuai kebutuhan.")
